@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/QuocViet22/api.git'
+                git branch: 'master', url: 'https://github.com/QuocViet22/api.git'
             }
         }
         stage('Build') {
