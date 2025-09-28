@@ -27,7 +27,7 @@ pipeline {
                 sh 'cp target/*.jar $JAR_NAME'
 
                 // Run jar in background
-                sh 'nohup java -jar $JAR_NAME --server.port=9090 > app.log 2>&1 &'
+                sh 'nohup java -jar $JAR_NAME --server.port=8080 > app.log 2>&1 &'
             }
         }
     }
