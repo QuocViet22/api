@@ -2,7 +2,9 @@ pipeline {
     agent any
 
     environment {
-        JAR_NAME = "api-0.0.1-SNAPSHOT.jar"  // Name for built jar
+        APP_NAME = "api-app"
+        JAR_NAME = "api-0.0.1-SNAPSHOT.jar"
+        DEPLOY_DIR = "$WORKSPACE/deploy"
     }
 
     stages {
@@ -20,14 +22,23 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Kill old process if running
-                sh 'pkill -f "$JAR_NAME" || true'
+                sh '''
+                    mkdir -p $DEPLOY_DIR
+                    cd $DEPLOY_DIR
 
-                // Copy jar from target folder
-                sh 'cp target/*.jar $JAR_NAME'
+                    # Kill old process if running
+                    if [ -f app.pid ]; then
+                        kill -9 $(cat app.pid) || true
+                        rm -f app.pid
+                    fi
 
-                // Run jar in background
-                sh 'nohup java -jar $JAR_NAME --server.port=8080 > app.log 2>&1 &'
+                    # Copy jar
+                    cp $WORKSPACE/target/$JAR_NAME .
+
+                    # Start new process
+                    nohup java -jar $JAR_NAME --server.port=8080 > app.log 2>&1 &
+                    echo $! > app.pid
+                '''
             }
         }
     }
