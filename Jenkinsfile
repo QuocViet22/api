@@ -1,11 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        maven 'Maven3' // Make sure Maven3 is configured in Jenkins (Manage Jenkins > Global Tool Configuration)
-        jdk 'Java17'   // Adjust JDK version to match your project
-    }
-
     environment {
         JAR_NAME = "api-0.0.1-SNAPSHOT.jar"  // Name for built jar
     }
